@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ItzProduction Team - 3D Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            overflow-x: hidden;
+            background-color: #000;
+            color: #fff;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        #content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            min-height: 100vh;
+            padding: 80px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .hero {
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            opacity: 0.8;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 2rem;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .tab-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-panel {
+            display: none;
+        }
+        
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+        }
+        
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 300px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+        
+        .step-number {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex-grow: 1;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 4rem 0;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .social-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-10px);
+        }
+        
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover .social-icon {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            opacity: 0.7;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+        
+        .scroll-indicator svg {
+            width: 30px;
+            height: 30px;
+            fill: #fff;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                border-radius: 20px;
+                width: 90%;
+                max-width: 300px;
+            }
+            
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .card-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Canvas Container -->
+    <div id="canvas-container"></div>
+    
+    <!-- Main Content -->
+    <div id="content">
+        <!-- Navigation -->
+        <nav class="navigation">
+            <div class="nav-container">
+                <a href="#introduction" class="nav-link active" data-tab="introduction">Introduction</a>
+                <a href="#hire" class="nav-link" data-tab="hire">Hire</a>
+                <a href="#support" class="nav-link" data-tab="support">Support</a>
+            </div>
+        </nav>
+        
+        <!-- Hero Section -->
+        <section class="section hero" id="home">
+            <h1>ItzProduction Team</h1>
+            <p>Professional Roblox Game Developers</p>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">148+</div>
+                    <div>Games Developed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">20M+</div>
+                    <div>Total Visits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6M+</div>
+                    <div>Active Players</div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 21l-12-18h24z"/>
+                </svg>
+            </div>
+        </section>
+        
+        <!-- Tabs Section -->
+        <section class="section" id="tabs">
+            <h2 class="section-title">Explore Our Services</h2>
+            
+            <div class="tab-content">
+                <!-- Introduction Tab -->
+                <div class="tab-panel active" id="introduction">
+                    <h3 class="card-title" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">About ItzProduction Team</h3>
+                    <p style="margin-bottom: 2rem; line-height: 1.8;">
+                        ItzProduction Team is a leading Roblox game development studio with a proven track record of creating engaging and popular games. Our team of talented developers, designers, and creative minds work together to build immersive experiences that millions of players enjoy.
+                    </p>
+                    <p style="margin-bottom: 2rem; line-height: 1.8;">
+                        With over 148 games in our portfolio, we've accumulated more than 20 million visits and maintain an active player base of 6 million users. Our commitment to quality, innovation, and player satisfaction has established us as one of the premier development teams on the Roblox platform.
+                    </p>
+                    
+                    <div class="card-container">
+                        <div class="card">
+                            <h4 class="card-title">Innovation</h4>
+                            <p>We constantly push the boundaries of what's possible on Roblox, creating unique gameplay mechanics and experiences that stand out in the marketplace.</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">Quality</h4>
+                            <p>Every game we develop undergoes rigorous testing to ensure a polished, bug-free experience that players can enjoy without frustration.</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">Community</h4>
+                            <p>We value player feedback and actively engage with our community to improve our games and create content that resonates with our audience.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hire Tab -->
+                <div class="tab-panel" id="hire">
+                    <h3 class="card-title" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">Hire Our Team</h3>
+                    <p style="margin-bottom: 2rem; line-height: 1.8;">
+                        Looking to bring your Roblox game idea to life? The ItzProduction Team offers professional development services to clients worldwide. With our extensive experience and proven success, we can help turn your concept into a popular Roblox experience.
+                    </p>
+                    
+                    <div style="margin-top: 3rem;">
+                        <h4 style="font-size: 1.5rem; margin-bottom: 1.5rem;">Our Development Process</h4>
+                        
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Consultation</h5>
+                                <p>We begin with a thorough consultation to understand your vision, target audience, and project requirements.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Planning & Design</h5>
+                                <p>Our team creates detailed game design documents, wireframes, and project timelines to ensure clear direction.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Development</h5>
+                                <p>Our experienced developers bring your game to life with regular updates and progress reports throughout the process.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Testing</h5>
+                                <p>We conduct thorough testing to identify and fix any issues, ensuring a polished final product.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h5 class="step-title">Launch & Support</h5>
+                                <p>We help you launch your game and provide ongoing support to ensure its continued success.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 3rem;">
+                        <p style="margin-bottom: 1.5rem;">Ready to start your project with us?</p>
+                        <a href="#footer" style="display: inline-block; background-color: rgba(255,255,255,0.2); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; transition: background-color 0.3s;">Contact Us Today</a>
+                    </div>
+                </div>
+                
+                <!-- Support Tab -->
+                <div class="tab-panel" id="support">
+                    <h3 class="card-title" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">Support</h3>
+                    <p style="margin-bottom: 2rem; line-height: 1.8;">
+                        Need assistance with one of our games or have questions about our services? Our support team is here to help you with any inquiries or issues you might encounter.
+                    </p>
+                    
+                    <div class="card-container">
+                        <div class="card">
+                            <h4 class="card-title">Game Support</h4>
+                            <p>Experiencing issues with one of our games? Our support team is ready to assist you in resolving any problems you might encounter.</p>
+                            <p style="margin-top: 1rem;">For game-related support, please join our Discord server for the fastest response.</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">Business Inquiries</h4>
+                            <p>Interested in working with ItzProduction Team? We're open to collaboration opportunities with other developers and brands.</p>
+                            <p style="margin-top: 1rem;">For business inquiries, please contact us via email at itzshauryz@gmail.com</p>
+                        </div>
+                        <div class="card">
+                            <h4 class="card-title">Join Our Team</h4>
+                            <p>Are you a talented Roblox developer looking to join a professional team? We're always on the lookout for skilled individuals.</p>
+                            <p style="margin-top: 1rem;">Send your portfolio and experience to itzshauryz@outlook.com</p>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 3rem;">
+                        <p>Our support team typically responds within 24-48 hours.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer" id="footer">
+            <h3 style="font-size: 2rem; margin-bottom: 1rem;">Connect With Us</h3>
+            
+            <div class="social-links">
+                <a href="https://discord.gg/KFwEZMux" class="social-link" target="_blank">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3847-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+                        </svg>
+                    </div>
+                    Discord
+                </a>
+                <a href="mailto:itzshauryz@gmail.com" class="social-link">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                        </svg>
+                    </div>
+                    Gmail
+                </a>
+                <a href="mailto:itzshauryz@outlook.com" class="social-link">
+                    <div class="social-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/>
+                        </svg>
+                    </div>
+                    Outlook
+                </a>
+            </div>
+            
+            <p class="copyright">© 2025 ItzProduction Team. All rights reserved.</p>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Three.js Scene Setup
+        const container = document.getElementById('canvas-container');
+        
+        // Create scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+        
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        // Materials
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        // Mesh
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        // Add floating cubes
+        const cubes = [];
+        const cubeCount = 20;
+        
+        for(let i = 0; i < cubeCount; i++) {
+            const geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.5,
+                wireframe: true
+            });
+            
+            const cube = new THREE.Mesh(geometry, material);
+            
+            // Random position
+            cube.position.x = (Math.random() - 0.5) * 10;
+            cube.position.y = (Math.random() - 0.5) * 10;
+            cube.position.z = (Math.random() - 0.5) * 10;
+            
+            // Random rotation
+            cube.rotation.x = Math.random() * Math.PI;
+            cube.rotation.y = Math.random() * Math.PI;
+            
+            // Store rotation speed
+            cube.rotationSpeed = {
+                x: (Math.random() - 0.5) * 0.01,
+                y: (Math.random() - 0.5) * 0.01,
+                z: (Math.random() - 0.5) * 0.01
+            };
+            
+            scene.add(cube);
+            cubes.push(cube);
+        }
+        
+        // Position camera
+        camera.position.z = 5;
+        
+        // Mouse movement effect
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate particle system
+            particlesMesh.rotation.x += 0.0005;
+            particlesMesh.rotation.y += 0.0005;
+            
+            // Move based on mouse position
+            particlesMesh.position.x = mouseX * 0.5;
+            particlesMesh.position.y = mouseY * 0.5;
+            
+            // Animate cubes
+            cubes.forEach(cube => {
+                cube.rotation.x += cube.rotationSpeed.x;
+                cube.rotation.y += cube.rotationSpeed.y;
+                cube.rotation.z += cube.rotationSpeed.z;
+            });
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Tab Navigation
+        const tabLinks = document.querySelectorAll('.nav-link');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        
+        tabLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Remove active class from all links and panels
+                tabLinks.forEach(link => link.classList.remove('active'));
+                tabPanels.forEach(panel => panel.classList.remove('active'));
+                
+                // Add active class to clicked link
+                link.classList.add('active');
+                
+                // Show corresponding panel
+                const tabId = link.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+                
+                // Smooth scroll to tabs section
+                document.getElementById('tabs').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Scroll indicator click
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.getElementById('tabs').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
