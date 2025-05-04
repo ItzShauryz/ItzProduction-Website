@@ -288,6 +288,265 @@
             fill: #fff;
         }
         
+        /* Animation Page Styles */
+        .movie-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .movie-poster {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            margin-bottom: 3rem;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .movie-poster:hover img {
+            transform: scale(1.05);
+        }
+        
+        .movie-poster::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 50%);
+        }
+        
+        .movie-title {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            z-index: 2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+        
+        .movie-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .movie-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .movie-description {
+            flex: 2;
+            min-width: 300px;
+        }
+        
+        .movie-description p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .movie-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .movie-meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .meta-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.3rem;
+        }
+        
+        .meta-value {
+            font-weight: bold;
+        }
+        
+        .production-stages {
+            margin-top: 4rem;
+        }
+        
+        .stage-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            position: relative;
+        }
+        
+        .stage-container::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+        
+        .stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+        }
+        
+        .stage-dot {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stage.completed .stage-dot {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #000;
+        }
+        
+        .stage.current .stage-dot {
+            background-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        
+        .stage-name {
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .behind-scenes {
+            margin-top: 4rem;
+        }
+        
+        .scenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .scene-item {
+            height: 180px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .scene-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .scene-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: scaleIn 0.3s;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .close-modal:hover {
+            opacity: 1;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-message {
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .modal-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .modal-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero h1 {
@@ -325,6 +584,23 @@
                 align-items: center;
                 gap: 1.5rem;
             }
+            
+            .movie-title {
+                font-size: 1.8rem;
+                bottom: 20px;
+                left: 20px;
+            }
+            
+            .stage-container {
+                overflow-x: auto;
+                padding-bottom: 1rem;
+                justify-content: flex-start;
+            }
+            
+            .stage {
+                min-width: 100px;
+                margin-right: 1rem;
+            }
         }
     </style>
 </head>
@@ -337,9 +613,10 @@
         <!-- Navigation -->
         <nav class="navigation">
             <div class="nav-container">
-                <a href="#introduction" class="nav-link active" data-tab="introduction">Introduction</a>
+                <a href="#introduction" class="nav-link" data-tab="introduction">Introduction</a>
                 <a href="#hire" class="nav-link" data-tab="hire">Hire</a>
                 <a href="#support" class="nav-link" data-tab="support">Support</a>
+                <a href="#animation" class="nav-link" data-tab="animation">Animation</a>
             </div>
         </nav>
         
@@ -454,7 +731,7 @@
                     
                     <div style="text-align: center; margin-top: 3rem;">
                         <p style="margin-bottom: 1.5rem;">Ready to start your project with us?</p>
-                        <a href="#footer" style="display: inline-block; background-color: rgba(255,255,255,0.2); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; transition: background-color 0.3s;">Contact Us Today</a>
+                        <button id="contact-button" style="background-color: rgba(255,255,255,0.2); color: white; padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer; transition: background-color 0.3s;">Contact Us Today</button>
                     </div>
                 </div>
                 
@@ -485,6 +762,127 @@
                     
                     <div style="text-align: center; margin-top: 3rem;">
                         <p>Our support team typically responds within 24-48 hours.</p>
+                    </div>
+                </div>
+                
+                <!-- Animation Tab -->
+                <div class="tab-panel" id="animation">
+                    <h3 class="card-title" style="text-align: center; font-size: 2rem; margin-bottom: 2rem;">ItzProduction | Animation</h3>
+                    
+                    <div class="movie-container">
+                        <div class="movie-poster">
+                            <img src="/placeholder.svg?height=450&width=800&text=The Last Photograph" alt="The Last Photograph Movie Poster">
+                            <h3 class="movie-title">The Last Photograph</h3>
+                        </div>
+                        
+                        <div class="movie-info">
+                            <div class="movie-details">
+                                <div class="movie-meta">
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Status</span>
+                                        <span class="meta-value">In Production</span>
+                                    </div>
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Release</span>
+                                        <span class="meta-value">Coming Soon</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="movie-meta">
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Director</span>
+                                        <span class="meta-value">ItzShauryz</span>
+                                    </div>
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Animation</span>
+                                        <span class="meta-value">ItzProduction Team</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="movie-meta">
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Platform</span>
+                                        <span class="meta-value">Roblox</span>
+                                    </div>
+                                    <div class="movie-meta-item">
+                                        <span class="meta-label">Genre</span>
+                                        <span class="meta-value">Drama/Mystery</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="movie-description">
+                                <p>
+                                    "The Last Photograph" is ItzProduction Team's ambitious debut into the world of Roblox animation films. This emotional story follows a young photographer who discovers a mysterious photograph that leads them on a journey of self-discovery and unexpected connections.
+                                </p>
+                                <p>
+                                    Using advanced animation techniques within the Roblox platform, our team is pushing the boundaries of what's possible in Roblox cinematography. The film features custom character animations, dynamic camera work, and atmospheric lighting to create an immersive storytelling experience.
+                                </p>
+                                <p>
+                                    Our dedicated animation team is currently focused on bringing this story to life, which is why our response times for other projects may be delayed. We appreciate your understanding as we work to complete this groundbreaking project.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="production-stages">
+                            <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Production Progress</h4>
+                            
+                            <div class="stage-container">
+                                <div class="stage completed">
+                                    <div class="stage-dot">✓</div>
+                                    <div class="stage-name">Script</div>
+                                </div>
+                                <div class="stage completed">
+                                    <div class="stage-dot">✓</div>
+                                    <div class="stage-name">Storyboard</div>
+                                </div>
+                                <div class="stage completed">
+                                    <div class="stage-dot">✓</div>
+                                    <div class="stage-name">Character Design</div>
+                                </div>
+                                <div class="stage current">
+                                    <div class="stage-dot">⟳</div>
+                                    <div class="stage-name">Animation</div>
+                                </div>
+                                <div class="stage">
+                                    <div class="stage-dot">5</div>
+                                    <div class="stage-name">Sound Design</div>
+                                </div>
+                                <div class="stage">
+                                    <div class="stage-dot">6</div>
+                                    <div class="stage-name">Final Editing</div>
+                                </div>
+                                <div class="stage">
+                                    <div class="stage-dot">7</div>
+                                    <div class="stage-name">Release</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="behind-scenes">
+                            <h4 style="font-size: 1.5rem; margin-bottom: 1rem;">Behind The Scenes</h4>
+                            <p style="margin-bottom: 1.5rem;">Get a glimpse into our animation process with these behind-the-scenes shots from "The Last Photograph" production.</p>
+                            
+                            <div class="scenes-grid">
+                                <div class="scene-item">
+                                    <img src="/placeholder.svg?height=180&width=250&text=Character Rigging" alt="Character Rigging">
+                                </div>
+                                <div class="scene-item">
+                                    <img src="/placeholder.svg?height=180&width=250&text=Environment Design" alt="Environment Design">
+                                </div>
+                                <div class="scene-item">
+                                    <img src="/placeholder.svg?height=180&width=250&text=Motion Capture" alt="Motion Capture">
+                                </div>
+                                <div class="scene-item">
+                                    <img src="/placeholder.svg?height=180&width=250&text=Lighting Setup" alt="Lighting Setup">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 4rem;">
+                            <p style="margin-bottom: 1.5rem;">Interested in our animation services?</p>
+                            <button id="animation-contact-button" style="background-color: rgba(255,255,255,0.2); color: white; padding: 12px 30px; border-radius: 50px; border: none; cursor: pointer; transition: background-color 0.3s;">Contact Us Today</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -523,6 +921,18 @@
             
             <p class="copyright">© 2025 ItzProduction Team. All rights reserved.</p>
         </footer>
+    </div>
+    
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h3 class="modal-title">Contact Request Received</h3>
+            <p class="modal-message">
+                Thanks for your interest, but we will not be able to contact or work on your project at this time. Due to our focus on "The Last Photograph" animation, it will take approximately 72 hours to respond to inquiries. We appreciate your understanding.
+            </p>
+            <button class="modal-button">Close</button>
+        </div>
     </div>
     
     <!-- Scripts -->
@@ -673,6 +1083,33 @@
             document.getElementById('tabs').scrollIntoView({
                 behavior: 'smooth'
             });
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('contact-modal');
+        const contactButton = document.getElementById('contact-button');
+        const animationContactButton = document.getElementById('animation-contact-button');
+        const closeModalButton = document.querySelector('.close-modal');
+        const modalCloseButton = document.querySelector('.modal-button');
+        
+        function openModal() {
+            modal.classList.add('active');
+        }
+        
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+        
+        contactButton.addEventListener('click', openModal);
+        animationContactButton.addEventListener('click', openModal);
+        closeModalButton.addEventListener('click', closeModal);
+        modalCloseButton.addEventListener('click', closeModal);
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
         });
     </script>
 </body>
